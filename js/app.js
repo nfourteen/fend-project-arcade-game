@@ -94,16 +94,54 @@ SpriteAnimation.prototype.render = function () {
     );
 };
 
+var Entity = function (rowCenter, speed, spriteBounds) {
+    this.rowCenter = rowCenter ? rowCenter : 55;
+    this.speed = speed ? speed : 1;
+    this.isOutOfView = false;
+    this.spriteBounds = spriteBounds ? spriteBounds : {
+        width: 101,
+        height: 171,
+        x: 0,
+        y: 171,
+        dx: 101,
+        dy: 171
+    };
+    this.spriteBounds.xOffset = this.spriteBounds.width / 2;
+    this.spriteBounds.yOffset = (this.spriteBounds.dy - this.spriteBounds.y) / 2;
+
+    this.x = -this.spriteBounds.width;
+    this.y = rowCenter - this.spriteBounds.y - this.spriteBounds.yOffset;
+    this.type = 'entity';
+};
+
+/**
+ * Required for game loop
+ */
+Entity.prototype.update = function(dt) {};
+
+/**
+ * Required for game loop
+ */
+Entity.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+/**
+ * Make sure entity is out of view
+ * @returns {boolean}
+ */
+Entity.prototype.outOfBounds = function() {
+    return (this.x > window.game.board.width);
+};
+
 /**
  * Enemy class
  * @param rowCenter - the center y position of row to draw enemy in
  * @param speed - default 1, multiplier to speed up movement
+ * @extends Entity
  * @constructor
  */
 var Enemy = function(rowCenter, speed) {
-    this.rowCenter = rowCenter ? rowCenter : 55;
-    this.speed = speed ? speed : 1;
-    this.isOutOfView = false;
     this.spriteBounds = {
         width: 101,
         height: 171,
@@ -112,14 +150,13 @@ var Enemy = function(rowCenter, speed) {
         dx: 99,
         dy: 155
     };
-    this.spriteBounds.xOffset = this.spriteBounds.width / 2;
-    this.spriteBounds.yOffset = (this.spriteBounds.dy - this.spriteBounds.y) / 2;
+    Entity.call(this, rowCenter, speed, this.spriteBounds);
     this.sprite = 'images/enemy-bug.png';
-
-    this.x = -this.spriteBounds.width;
-    this.y = rowCenter - this.spriteBounds.y - this.spriteBounds.yOffset;
     this.type = 'enemy';
 };
+
+Enemy.prototype = Object.create(Entity.prototype);
+Enemy.prototype.constructor = Enemy;
 
 /**
  * Required for game loop
@@ -146,30 +183,13 @@ Enemy.prototype.update = function(dt) {
 };
 
 /**
- * Required for game loop
- */
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-/**
- * Make sure enemy is out of view
- * @returns {boolean}
- */
-Enemy.prototype.outOfBounds = function() {
-    return (this.x > window.game.board.width);
-};
-
-/**
  * Collectible class: items for a player to collect to score additional points
  * @param rowCenter - the center y position of row to draw collectible in
  * @param speed - default 1, multiplier to speed up movement
+ * @extends Entity
  * @constructor
  */
 var Collectible = function(rowCenter, speed) {
-    this.rowCenter = rowCenter ? rowCenter : 55;
-    this.speed = speed ? speed : 1;
-    this.isOutOfView = false;
     this.spriteBounds = {
         width: 101,
         height: 171,
@@ -178,15 +198,14 @@ var Collectible = function(rowCenter, speed) {
         dx: 99,
         dy: 152
     };
-    this.spriteBounds.xOffset = this.spriteBounds.width / 2;
-    this.spriteBounds.yOffset = (this.spriteBounds.dy - this.spriteBounds.y) / 2;
+    Entity.call(this, rowCenter, speed, this.spriteBounds);
     this.sprite = 'images/Star.png';
-
     this.points = 20;
-    this.x = -this.spriteBounds.width;
-    this.y = rowCenter - this.spriteBounds.y - this.spriteBounds.yOffset;
     this.type = 'collectible';
 };
+
+Collectible.prototype = Object.create(Entity.prototype);
+Collectible.prototype.constructor = Collectible;
 
 /**
  * Required for game loop
@@ -194,8 +213,6 @@ var Collectible = function(rowCenter, speed) {
  */
 Collectible.prototype.update = function(dt) {
     this.x += this.spriteBounds.width * dt * this.speed;
-
-    this.isOutOfView = this.outOfBounds();
 
     // add points if a collision occurs
     if (window.player.x < this.x + this.spriteBounds.xOffset &&
@@ -217,22 +234,6 @@ Collectible.prototype.update = function(dt) {
         window.game.addToScore(this.points * collected[0].speed)
     }
 };
-
-/**
- * Required for game loop
- */
-Collectible.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-/**
- * Make sure collectible is out of view
- * @returns {boolean}
- */
-Collectible.prototype.outOfBounds = function() {
-    return (this.x > window.game.board.width);
-};
-
 
 /**
  * Player class

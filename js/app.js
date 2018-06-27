@@ -213,6 +213,7 @@ Collectible.prototype.constructor = Collectible;
  */
 Collectible.prototype.update = function(dt) {
     this.x += this.spriteBounds.width * dt * this.speed;
+    this.isOutOfView = this.outOfBounds();
 
     // add points if a collision occurs
     if (window.player.x < this.x + this.spriteBounds.xOffset &&

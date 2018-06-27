@@ -1,3 +1,59 @@
 body {
     text-align: center;
 }
+
+
+.wrapper {
+    position: relative;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -252px;
+    padding: 0;
+    width: 505px;
+    height: 606px;
+    z-index: 1;
+}
+
+.game-over {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -252px;
+    width: 505px;
+    height: 606px;
+    z-index: 50;
+    text-align: center;
+    padding-top: 150px;
+}
+
+.game-over h2 {
+    color: white;
+}
+
+.restart {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid darkgreen;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+#instructions {
+    position: absolute;
+    text-align: left;
+    top: 606px;
+    left: 50%;
+    margin-left: -252px;
+    width: 505px;
+}

@@ -1,3 +1,17 @@
+### Installation
+
+### Game Play
+
+* Earn 10 points by crossing the board to the water
+* Reaching the water will reset you to the grass
+* Collect stars to earn additional points, faster stars equal more points
+* You have 3 lives, hitting a bug will take one life and reset you to the grass
+
+### TODO's
+
+* Bug randomization during game play, currently only randomized at the start of a new game
+* Add more collectibles?
+
 frontend-nanodegree-arcade-game
 ===============================
 

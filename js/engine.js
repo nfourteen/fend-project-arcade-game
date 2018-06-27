@@ -21,12 +21,19 @@ var Engine = (function(global) {
     var doc = global.document,
         win = global.window,
         canvas = doc.createElement('canvas'),
+        wrapper = doc.createElement('div'),
         ctx = canvas.getContext('2d'),
         lastTime;
 
     canvas.width = 505;
     canvas.height = 606;
-    doc.body.appendChild(canvas);
+    wrapper.classList.add('wrapper');
+    doc.body.appendChild(wrapper);
+    wrapper.appendChild(canvas);
+    // canvas.addEventListener('click', function (event) {
+    //     console.log('x', event.clientX, 'y', event.clientY);
+    //     console.log('canvasX', event.clientX - canvas.offsetLeft, 'canvasY', event.clientY - canvas.offsetTop);
+    // });
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -90,10 +97,11 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
+        entityQueue.forEach(function(entity) {
+            entity.update(dt);
         });
         player.update();
+        game.updateScore(dt);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -119,7 +127,7 @@ var Engine = (function(global) {
             row, col;
 
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
+        ctx.clearRect(0,0,canvas.width,canvas.height);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -134,6 +142,7 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
+                // console.log('Col', col * 101, 'Row', row * 83, 'Image', rowImages[row]);
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
@@ -149,11 +158,13 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
+        entityQueue.forEach(function(entity) {
+            entity.render();
         });
 
         player.render();
+        game.drawLives();
+        game.renderScore();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -173,7 +184,11 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/enemy-bug-red.png',
+        'images/char-boy.png',
+        'images/life-sprite.png',
+        'images/Star-sprite.png',
+        'images/Star.png'
     ]);
     Resources.onReady(init);
 
@@ -183,3 +198,4 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
 })(this);
+

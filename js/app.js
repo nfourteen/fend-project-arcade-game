@@ -492,10 +492,10 @@ Game.prototype.removeFromQueue = function (obj) {
  */
 Game.prototype.cleanUpQueue = function() {
     for(var i = 0; i < window.entityQueue.length; i++) {
-        if (window.entityQueue[i].type = 'collectible' && window.entityQueue[i].isOutOfView === true) {
+        if (window.entityQueue[i].type === 'collectible' && window.entityQueue[i].isOutOfView === true) {
             window.entityQueue.splice(i, 1);
         }
-        if (window.entityQueue[i].type = 'animation' && window.entityQueue[i].animationComplete === true) {
+        if (window.entityQueue[i].type === 'animation' && window.entityQueue[i].animationComplete === true) {
             window.entityQueue.splice(i, 1);
         }
     }
@@ -604,7 +604,7 @@ Game.prototype.gameOver = function () {
 
 
 // Set up required variables and start the game
-var entityQueue = new ObservableArray();
+var entityQueue = [];
 window.entityQueue = entityQueue;
 
 var game = new Game();
@@ -615,11 +615,3 @@ window.player = player;
 
 game.init();
 game.addInstructions();
-
-entityQueue.addEventListener("itemremoved", function(e) {
-    console.log("Removed %o at index %d.", e.item, e.index);
-});
-
-// entityQueue.addEventListener("itemadded", function(e) {
-//     console.log("Added %o at index %d.", e.item, e.index);
-// });

@@ -604,7 +604,7 @@ Game.prototype.gameOver = function () {
 
 
 // Set up required variables and start the game
-var entityQueue = [];
+var entityQueue = new ObservableArray();
 window.entityQueue = entityQueue;
 
 var game = new Game();
@@ -616,3 +616,10 @@ window.player = player;
 game.init();
 game.addInstructions();
 
+entityQueue.addEventListener("itemremoved", function(e) {
+    console.log("Removed %o at index %d.", e.item, e.index);
+});
+
+// entityQueue.addEventListener("itemadded", function(e) {
+//     console.log("Added %o at index %d.", e.item, e.index);
+// });

@@ -1,5 +1,12 @@
 ### Installation
 
+Drag and drop the index.html file into an empty browser window or if you have `Node.js` and `NPM`, run the following command from the project root:
+
+```
+npm install
+gulp
+```
+
 ### Game Play
 
 * Earn 10 points by crossing the board to the water

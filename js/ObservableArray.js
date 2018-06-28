@@ -2,6 +2,7 @@
  * Copyright © 2018 Nfourteen. All rights reserved.
  */
 
+// Taken from: https://stackoverflow.com/questions/5100376/how-to-watch-for-array-changes
 function ObservableArray(items) {
     var _self = this,
         _array = [],
